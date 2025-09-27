@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import cronstrue from 'cronstrue';
 import { isValidCron } from 'cron-validator';
+import * as cronParser from 'cron-parser';
 import { useStyleStore } from '@/stores/style.store';
+import { getTimezoneOptions, formatDateInTimezone } from './timezone.utils';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
 
 function isCronValid(v: string) {
@@ -16,12 +18,18 @@ const enableLogging = ref(true);
 const logPath = ref('/var/log/myjob');
 const rotateDaily = ref(true);
 const redirectStderr = ref(true);
+const selectedTimezone = ref('UTC');
+const numberOfRuns = ref(10);
+
 const cronstrueConfig = reactive({
   verbose: true,
   dayOfWeekStartIndexZero: true,
   use24HourTimeFormat: true,
   throwExceptionOnParseError: true,
 });
+
+// Timezone options for the select component
+const timezoneOptions = getTimezoneOptions();
 
 const helpers = [
   {
@@ -105,6 +113,37 @@ const cronString = computed(() => {
   return ' ';
 });
 
+// Compute next scheduled runs
+const nextScheduledRuns = computed(() => {
+  if (!isCronValid(cron.value)) {
+    return [];
+  }
+
+  try {
+    const interval = cronParser.default.parse(cron.value, { currentDate: new Date() });
+    const runs: { date: Date; formatted: string }[] = [];
+    
+    for (let i = 0; i < numberOfRuns.value; i++) {
+      const nextDate = interval.next().toDate();
+      runs.push({
+        date: nextDate,
+        formatted: formatDateInTimezone(nextDate, selectedTimezone.value),
+      });
+    }
+    
+    return runs;
+  } catch (error) {
+    console.error('Error calculating next runs:', error);
+    return [];
+  }
+});
+
+const cronValidationError = computed(() => {
+  if (!cron.value.trim()) return null;
+  if (isCronValid(cron.value)) return null;
+  return 'This cron expression is invalid';
+});
+
 const logFile = computed(() => `${logPath.value}${rotateDaily.value ? '_$(date +\\%F)' : ''}.log`);
 const crontabLine = computed(() => {
   const baseCmd = (command.value || '').trim() || 'echo';
@@ -177,6 +216,65 @@ const cronValidationRules = [
       </n-form>
     </div>
   </c-card>
+
+  <!-- Next Scheduled Runs Section -->
+  <c-card>
+    <div mb-4>
+      <h3 mb-3>{{ $t('tools.crontab-generator.nextRuns') }}</h3>
+      
+      <div flex gap-4 mb-4 flex-wrap>
+        <div flex-1 min-w-200px>
+          <n-form-item :label="$t('tools.crontab-generator.timezone')">
+            <c-select
+              v-model:value="selectedTimezone"
+              :options="timezoneOptions"
+              :placeholder="$t('tools.crontab-generator.selectTimezone')"
+              searchable
+              class="w-full"
+            />
+          </n-form-item>
+        </div>
+        
+        <div min-w-150px>
+          <n-form-item :label="$t('tools.crontab-generator.numberOfRuns')">
+            <n-input-number
+              v-model:value="numberOfRuns"
+              :min="1"
+              :max="50"
+              class="w-full"
+            />
+          </n-form-item>
+        </div>
+      </div>
+
+      <!-- Error message for invalid cron -->
+      <div v-if="cronValidationError" mb-4>
+        <n-alert type="error" :title="$t('tools.crontab-generator.invalidCronExpression')">
+          {{ cronValidationError }}
+        </n-alert>
+      </div>
+
+      <!-- Scheduled runs list -->
+      <div v-if="nextScheduledRuns.length > 0">
+        <div class="runs-list">
+          <div
+            v-for="(run, index) in nextScheduledRuns"
+            :key="index"
+            class="run-item"
+            flex justify-between items-center py-2 px-3 mb-1
+          >
+            <span class="run-index">{{ index + 1 }}.</span>
+            <span class="run-time" font-mono>{{ run.formatted }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="!cronValidationError" class="text-center py-8 opacity-60">
+        {{ $t('tools.crontab-generator.noScheduledRuns') }}
+      </div>
+    </div>
+  </c-card>
+
   <c-card>
     <pre>
 ┌──────────── [optional] seconds (0 - 59)
@@ -228,5 +326,39 @@ const cronValidationRules = [
 pre {
   overflow: auto;
   padding: 10px 0;
+}
+
+.runs-list {
+  max-height: 400px;
+  overflow-y: auto;
+  background: v-bind('styleStore.isDarkTheme ? "#2a2a2a" : "#f8f9fa"');
+  border-radius: 6px;
+  border: 1px solid v-bind('styleStore.isDarkTheme ? "#444" : "#e1e5e9"');
+}
+
+.run-item {
+  border-bottom: 1px solid v-bind('styleStore.isDarkTheme ? "#333" : "#eee"');
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background: v-bind('styleStore.isDarkTheme ? "#333" : "#f0f0f0"');
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  .run-index {
+    color: v-bind('styleStore.isDarkTheme ? "#888" : "#666"');
+    font-weight: 500;
+    min-width: 30px;
+  }
+  
+  .run-time {
+    color: v-bind('styleStore.isDarkTheme ? "#fff" : "#333"');
+    font-size: 14px;
+    text-align: right;
+    flex: 1;
+  }
 }
 </style>

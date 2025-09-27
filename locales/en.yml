@@ -191,6 +191,12 @@ tools:
   crontab-generator:
     title: Crontab generator
     description: Validate and generate crontab and get the human-readable description of the cron schedule. Includes log-to-file with optional daily rotation.
+    timezone: Timezone
+    selectTimezone: Select timezone
+    nextRuns: Next scheduled runs
+    numberOfRuns: Number of runs to show
+    invalidCronExpression: Invalid cron expression
+    noScheduledRuns: No scheduled runs available
 
   http-status-codes:
     title: HTTP status codes

@@ -190,6 +190,12 @@ tools:
   crontab-generator:
     title: Trình tạo Crontab
     description: Xác thực và tạo crontab, kèm mô tả dễ đọc cho lịch cron. Hỗ trợ ghi log ra file và xoay theo ngày.
+    timezone: Múi giờ
+    selectTimezone: Chọn múi giờ
+    nextRuns: Lần chạy tiếp theo
+    numberOfRuns: Số lần chạy hiển thị
+    invalidCronExpression: Biểu thức cron không hợp lệ
+    noScheduledRuns: Không có lần chạy được lên lịch
   http-status-codes:
     title: Mã trạng thái HTTP
     description: Danh sách tất cả các mã trạng thái HTTP, tên và ý nghĩa của chúng.

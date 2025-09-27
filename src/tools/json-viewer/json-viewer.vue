@@ -5,6 +5,7 @@ import { formatJson } from './json.models';
 import { withDefaultOnError } from '@/utils/defaults';
 import { useValidation } from '@/composable/validation';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
+import { getJsonParseLocation } from '@/utils/jsonErrorLocation';
 
 const inputElement = ref<HTMLElement>();
 
@@ -18,7 +19,23 @@ const rawJsonValidation = useValidation({
   rules: [
     {
       validator: v => v === '' || JSON5.parse(v),
-      message: 'Provided JSON is not valid.',
+      getErrorMessage: (v: string) => {
+        try {
+          if (v === '') {
+            return '';
+          }
+          JSON5.parse(v);
+          return '';
+        }
+        catch (e: any) {
+          const loc = getJsonParseLocation(e, v);
+          if (loc) {
+            return `Line ${loc.line}, Column ${loc.column}\n${loc.preview ?? ''}`;
+          }
+          return String(e?.message ?? e ?? 'Unknown error');
+        }
+      },
+      message: 'Provided JSON is not valid. {0}',
     },
   ],
 });

@@ -9,7 +9,7 @@ home:
   home: Home
   uiLib: 'UI Lib'
   support: 'Support IT-Tools development'
-  buyMeACoffee: 'Buy me a coffee'
+  buyMeACoffee: ''
   follow:
     title: 'You like it-tools?'
     p1: 'Give us a star on'
@@ -33,7 +33,7 @@ about:
 
     This wonderful website, made with ❤ by [Corentin Thomasset](https://corentin.tech?utm_source=it-tools&utm_medium=about) , aggregates useful tools for developer and people working in IT. If you find it useful, please feel free to share it to people you think may find it useful too and don't forget to bookmark it in your shortcut bar!
 
-    IT Tools is open-source (under the GPL-3.0 license) and free, and will always be, but it costs me money to host and renew the domain name. If you want to support my work, and encourage me to add more tools, please consider supporting by [sponsoring me](https://www.buymeacoffee.com/cthmsst).
+    IT Tools is open-source (under the GPL-3.0 license) and free, and will always be.
 
     ## Technologies
 
@@ -58,6 +58,21 @@ toolCard:
 search:
   label: Search
 tools:
+  password-generator:
+    title: Password generator
+    description: Generate strong, secure passwords with customizable character sets, exclude ambiguous characters, and ensure at least one character from each selected set.
+    uppercase: Uppercase (ABC...)
+    lowercase: Lowercase (abc...)
+    numbers: Numbers (123...)
+    symbols: Symbols (!-;...)
+    excludeAmbiguous: Exclude ambiguous characters (Il1l0Oo, etc.)
+    ensureEach: Ensure at least one from each selected set
+    length: Length
+    placeholder: 'The password...'
+    copied: Password copied to the clipboard
+    button:
+      copy: Copy
+      refresh: Refresh
   categories:
     favorite-tools: 'Your favorite tools'
     crypto: Crypto

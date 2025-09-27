@@ -1,17 +1,7 @@
 <script setup lang="ts">
-import jsQR from 'jsqr';
+import jsQR, { type QRCode } from 'jsqr';
 import _ from 'lodash';
 import { useCopy } from '@/composable/copy';
-
-interface QRResult {
-  data: string;
-  location?: {
-    topLeftCorner: { x: number; y: number };
-    topRightCorner: { x: number; y: number };
-    bottomLeftCorner: { x: number; y: number };
-    bottomRightCorner: { x: number; y: number };
-  };
-}
 
 const {
   videoInputs: cameras,
@@ -31,7 +21,7 @@ const canvas = ref<HTMLCanvasElement>();
 const currentCamera = ref(cameras.value[0]?.deviceId);
 const permissionCannotBePrompted = ref(false);
 const isScanning = ref(false);
-const decodedResult = ref<QRResult | null>(null);
+const decodedResult = ref<QRCode | null>(null);
 const errorMessage = ref('');
 const fileInput = ref() as Ref<File>;
 const uploadedImage = ref<HTMLImageElement>();
@@ -95,10 +85,7 @@ function startScanning() {
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     
     if (code) {
-      decodedResult.value = {
-        data: code.data,
-        location: code.location
-      };
+      decodedResult.value = code;
       drawBoundingBox(ctx, code.location);
       stopScanning();
     }
@@ -113,9 +100,7 @@ function stopScanning() {
   }
 }
 
-function drawBoundingBox(ctx: CanvasRenderingContext2D, location: any) {
-  if (!location) return;
-  
+function drawBoundingBox(ctx: CanvasRenderingContext2D, location: QRCode['location']) {
   ctx.beginPath();
   ctx.moveTo(location.topLeftCorner.x, location.topLeftCorner.y);
   ctx.lineTo(location.topRightCorner.x, location.topRightCorner.y);
@@ -180,10 +165,7 @@ async function onFileUpload(file: File) {
     const code = jsQR(imageData.data, imageData.width, imageData.height);
     
     if (code) {
-      decodedResult.value = {
-        data: code.data,
-        location: code.location
-      };
+      decodedResult.value = code;
       errorMessage.value = '';
     } else {
       decodedResult.value = null;

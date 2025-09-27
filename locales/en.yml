@@ -336,6 +336,22 @@ tools:
     title: RSA key pair generator
     description: Generate a new random RSA private and public pem certificate key pair.
 
+  ec-ed25519-key-pair-generator:
+    title: EC/Ed25519 key pair generator
+    description: Generate EC (P-256/384/521) and Ed25519 key pairs with PEM and JWK export formats.
+    algorithm: Algorithm
+    generate: Generate key pair
+    curve: Curve
+    privateKeyPem: Private Key (PEM, PKCS#8)
+    publicKeyPem: Public Key (PEM, SPKI)
+    privateKeyJwk: Private Key (JWK)
+    publicKeyJwk: Public Key (JWK)
+    download: Download
+    copyPrivateKey: Copy private key to clipboard
+    copyPublicKey: Copy public key to clipboard
+    copyPrivateKeyJwk: Copy private key JWK to clipboard
+    copyPublicKeyJwk: Copy public key JWK to clipboard
+
   html-wysiwyg-editor:
     title: HTML WYSIWYG editor
     description: Online, feature-rich WYSIWYG HTML editor which generates the source code of the content immediately.

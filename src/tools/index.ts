@@ -44,6 +44,7 @@ import { tool as dockerRunToDockerComposeConverter } from './docker-run-to-docke
 import { tool as dockerComposeToDockerRun } from './docker-compose-to-docker-run';
 import { tool as htmlWysiwygEditor } from './html-wysiwyg-editor';
 import { tool as rsaKeyPairGenerator } from './rsa-key-pair-generator';
+import { tool as ecEd25519KeyPairGenerator } from './ec-ed25519-key-pair-generator';
 import { tool as textToNatoAlphabet } from './text-to-nato-alphabet';
 import { tool as slugifyString } from './slugify-string';
 import { tool as keycodeInfo } from './keycode-info';
@@ -99,7 +100,7 @@ import { tool as richTextToMarkdown } from './rich-text-to-markdown';
 export const toolsByCategory: ToolCategory[] = [
   {
     name: 'Crypto',
-    components: [tokenGenerator, passwordGenerator, hashText, bcrypt, uuidGenerator, ulidGenerator, cypher, bip39, hmacGenerator, rsaKeyPairGenerator, passwordStrengthAnalyser, pdfSignatureChecker],
+    components: [tokenGenerator, passwordGenerator, hashText, bcrypt, uuidGenerator, ulidGenerator, cypher, bip39, hmacGenerator, rsaKeyPairGenerator, ecEd25519KeyPairGenerator, passwordStrengthAnalyser, pdfSignatureChecker],
   },
   {
     name: 'Converter',

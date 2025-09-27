@@ -288,4 +288,58 @@ function tryFormatJson(text: string): string {
   try { return JSON.stringify(JSON.parse(text), null, 2); } catch { return text; }
 }
 
+export function generatePythonRequests(ir: HttpRequestIR): string {
+  const method = ir.method.toUpperCase();
+  const headers = JSON.stringify(ir.headers || {}, null, 2)
+    .replace(/"/g, '\"');
+  const hasBody = ir.body !== undefined;
+  const body = hasBody ? (isJsonContent(ir) ? tryFormatJson(ir.body!) : String(ir.body)) : '';
+  const bodyLine = hasBody ? (isJsonContent(ir)
+    ? `json = ${body}\n` : `data = ${JSON.stringify(String(ir.body)).replace(/"/g, '\"')}\n`) : '';
+  const sendArg = hasBody ? (isJsonContent(ir) ? 'json=json' : 'data=data') : '';
+  return `import requests\n\nurl = "${ir.url.replace(/"/g, '\"')}"\nheaders = ${headers}\n${bodyLine}res = requests.request("${method}", url, headers=headers${sendArg ? `, ${sendArg}` : ''})\nprint(res.status_code)\ntry:\n    print(res.json())\nexcept Exception:\n    print(res.text)`;
+}
+
+export function generateGoHttp(ir: HttpRequestIR): string {
+  const hasBody = ir.body !== undefined;
+  const bodyExpr = hasBody
+    ? (isJsonContent(ir)
+      ? `bytes.NewBuffer([]byte(${JSON.stringify(tryFormatJson(ir.body!))}))`
+      : `bytes.NewBufferString(${JSON.stringify(String(ir.body))})`)
+    : 'nil';
+  const lines: string[] = [];
+  lines.push('package main');
+  lines.push('import (');
+  lines.push('  "fmt"');
+  lines.push('  "io"');
+  lines.push('  "bytes"');
+  lines.push('  "net/http"');
+  lines.push(')');
+  lines.push('func main() {');
+  lines.push(`  req, _ := http.NewRequest("${ir.method.toUpperCase()}", "${ir.url}", ${bodyExpr})`);
+  for (const [k, v] of Object.entries(ir.headers || {})) {
+    lines.push(`  req.Header.Set("${k}", "${v.replace(/"/g, '\"')}")`);
+  }
+  lines.push('  resp, err := http.DefaultClient.Do(req)');
+  lines.push('  if err != nil { panic(err) }');
+  lines.push('  defer resp.Body.Close()');
+  lines.push('  b, _ := io.ReadAll(resp.Body)');
+  lines.push('  fmt.Println(string(b))');
+  lines.push('}');
+  return lines.join('\n');
+}
+
+export function generatePowershell(ir: HttpRequestIR): string {
+  const method = ir.method.toUpperCase();
+  const headers = JSON.stringify(ir.headers || {}).replace(/"/g, '\"');
+  const hasBody = ir.body !== undefined;
+  const bodyVal = hasBody ? (isJsonContent(ir) ? tryFormatJson(ir.body!) : String(ir.body)) : '';
+  const bodyLine = hasBody ? `\n$body = @"\n${bodyVal}\n"@` : '';
+  const ct = Object.keys(ir.headers || {}).find(h => h.toLowerCase() === 'content-type');
+  const ctVal = ct ? ir.headers[ct] : (hasBody && isJsonContent(ir) ? 'application/json' : undefined);
+  const ctArg = ctVal ? ` -ContentType "${ctVal.replace(/"/g, '\"')}"` : '';
+  const bodyArg = hasBody ? ' -Body $body' : '';
+  return `$headers = ConvertFrom-Json "${headers}"${bodyLine}\n$response = Invoke-RestMethod -Method ${method} -Uri "${ir.url.replace(/"/g, '\"')}" -Headers $headers${ctArg}${bodyArg}\n$response | ConvertTo-Json -Depth 10`;
+}
+
 

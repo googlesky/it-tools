@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { parseCurlCommand, generateAxios, generateFetch, generateHttpie, generateSqlmap, generatePostmanCollection, generateInsomniaRequest } from './curl-to-code.service';
+import { parseCurlCommand, generateAxios, generateFetch, generateHttpie, generateSqlmap, generatePostmanCollection, generateInsomniaRequest, generatePythonRequests, generateGoHttp, generatePowershell } from './curl-to-code.service';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
 
 const curl = ref("curl -X POST 'https://api.example.com/users?active=true' \\\n+  -H 'Authorization: Bearer <token>' \\\n+  -H 'Content-Type: application/json' \\\n+  --data '{\"name\":\"Alice\",\"age\":30}'");
 
-const target = ref<'fetch' | 'axios' | 'httpie' | 'sqlmap' | 'postman' | 'insomnia'>('fetch');
+const target = ref<'fetch' | 'axios' | 'httpie' | 'sqlmap' | 'postman' | 'insomnia' | 'python' | 'go' | 'powershell'>('fetch');
 
 const output = computed(() => {
   const ir = parseCurlCommand(curl.value || '');
@@ -14,6 +14,9 @@ const output = computed(() => {
   if (target.value === 'sqlmap') return generateSqlmap(ir);
   if (target.value === 'postman') return generatePostmanCollection(ir);
   if (target.value === 'insomnia') return generateInsomniaRequest(ir);
+  if (target.value === 'python') return generatePythonRequests(ir);
+  if (target.value === 'go') return generateGoHttp(ir);
+  if (target.value === 'powershell') return generatePowershell(ir);
   return generateFetch(ir);
 });
 </script>
@@ -37,6 +40,9 @@ const output = computed(() => {
             { label: 'sqlmap', value: 'sqlmap' },
             { label: 'Postman (collection JSON)', value: 'postman' },
             { label: 'Insomnia (request JSON)', value: 'insomnia' },
+            { label: 'Python (requests)', value: 'python' },
+            { label: 'Go (net/http)', value: 'go' },
+            { label: 'PowerShell (Invoke-RestMethod)', value: 'powershell' },
           ]"
         />
       </n-form-item>

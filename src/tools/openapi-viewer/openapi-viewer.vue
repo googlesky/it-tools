@@ -9,6 +9,8 @@ const spec = ref<any>(null);
 const errorMsg = ref('');
 const selectedPath = ref<string>('');
 const selectedMethod = ref<HttpMethod | ''>('');
+const remoteUrl = ref('');
+const fileInput = ref<HTMLInputElement | null>(null);
 
 function parseSpec() {
   try {
@@ -23,6 +25,29 @@ function parseSpec() {
     spec.value = null;
     errorMsg.value = String(e?.message || e);
   }
+}
+
+async function loadFromUrl() {
+  try {
+    errorMsg.value = '';
+    if (!remoteUrl.value) return;
+    const res = await fetch(remoteUrl.value);
+    const text = await res.text();
+    raw.value = text;
+    parseSpec();
+  }
+  catch (e: any) {
+    errorMsg.value = String(e?.message || e);
+  }
+}
+
+async function onPickFile(e: Event) {
+  const input = e.target as HTMLInputElement;
+  const f = input.files?.[0];
+  if (!f) return;
+  const text = await f.text();
+  raw.value = text;
+  parseSpec();
 }
 
 const pathsList = computed(() => {
@@ -56,6 +81,9 @@ const sampleRequest = computed(() => {
   return lines.join('\n');
 });
 
+const parameters = computed(() => endpoint.value?.parameters || []);
+const responses = computed(() => endpoint.value?.responses || {});
+
 function exampleFromSchema(schema: any): any {
   if (!schema) return null;
   if (schema.example !== undefined) return schema.example;
@@ -81,6 +109,10 @@ function exampleFromSchema(schema: any): any {
         <c-input-text v-model:value="raw" multiline rows="16" class="w-full" placeholder="Paste OpenAPI spec here..." />
         <div class="mt-2 flex gap-2">
           <n-button type="primary" @click="parseSpec">Parse</n-button>
+          <n-input v-model:value="remoteUrl" placeholder="https://example.com/openapi.yaml" style="max-width: 420px" />
+          <n-button @click="loadFromUrl">Load URL</n-button>
+          <input ref="fileInput" type="file" accept=".yml,.yaml,.json" @change="onPickFile" style="display:none" />
+          <n-button @click="fileInput && fileInput.click()">Pick file</n-button>
         </div>
         <c-alert v-if="errorMsg" type="error" class="mt-2">{{ errorMsg }}</c-alert>
       </n-gi>
@@ -103,6 +135,25 @@ function exampleFromSchema(schema: any): any {
                 <div class="mb-3">{{ endpoint.summary || endpoint.operationId || '—' }}</div>
                 <div class="mb-2 text-sm opacity-80">Fetch sample:</div>
                 <TextareaCopyable :value="sampleRequest" language="javascript" class="w-full" />
+                <div class="mt-3" v-if="parameters && parameters.length">
+                  <div class="mb-2 text-sm opacity-80">Parameters:</div>
+                  <ul class="list-disc pl-4">
+                    <li v-for="p in parameters" :key="p.name">
+                      <strong>{{ p.name }}</strong> <span class="opacity-70">({{ p.in }})</span>
+                      <span v-if="p.required" class="text-red-500 ml-1">required</span>
+                      <div class="opacity-80 text-sm" v-if="p.description">{{ p.description }}</div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-3" v-if="Object.keys(responses).length">
+                  <div class="mb-2 text-sm opacity-80">Responses:</div>
+                  <ul class="list-disc pl-4">
+                    <li v-for="(r, code) in responses" :key="code">
+                      <strong>{{ code }}</strong>
+                      <span class="opacity-80 ml-1">{{ r.description || '' }}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </n-gi>
           </n-grid>

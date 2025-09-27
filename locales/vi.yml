@@ -328,6 +328,22 @@ tools:
     title: Trình tạo cặp khóa RSA
     description: Tạo các chứng chỉ pem khóa riêng tư và khóa công khai RSA ngẫu nhiên mới.
 
+  ec-ed25519-key-pair-generator:
+    title: Trình tạo cặp khóa EC/Ed25519
+    description: Tạo cặp khóa EC (P-256/384/521) và Ed25519 với định dạng xuất PEM và JWK.
+    algorithm: Thuật toán
+    generate: Tạo cặp khóa
+    curve: Đường cong
+    privateKeyPem: Khóa riêng tư (PEM, PKCS#8)
+    publicKeyPem: Khóa công khai (PEM, SPKI)
+    privateKeyJwk: Khóa riêng tư (JWK)
+    publicKeyJwk: Khóa công khai (JWK)
+    download: Tải xuống
+    copyPrivateKey: Sao chép khóa riêng tư vào clipboard
+    copyPublicKey: Sao chép khóa công khai vào clipboard
+    copyPrivateKeyJwk: Sao chép khóa riêng tư JWK vào clipboard
+    copyPublicKeyJwk: Sao chép khóa công khai JWK vào clipboard
+
   html-wysiwyg-editor:
     title: Trình soạn thảo HTML WYSIWYG
     description: Trình soạn thảo HTML trực tuyến với trình soạn thảo WYSIWYG đa chức năng, lấy mã nguồn của nội dung ngay lập tức.

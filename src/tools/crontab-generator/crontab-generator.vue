@@ -120,7 +120,7 @@ const nextScheduledRuns = computed(() => {
   }
 
   try {
-    const interval = cronParser.default.parse(cron.value, { currentDate: new Date() });
+    const interval = cronParser.parseExpression(cron.value, { currentDate: new Date() });
     const runs: { date: Date; formatted: string }[] = [];
     
     for (let i = 0; i < numberOfRuns.value; i++) {

@@ -3,6 +3,7 @@ import cronstrue from 'cronstrue';
 import { isValidCron } from 'cron-validator';
 import { useStyleStore } from '@/stores/style.store';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
+import parser from 'cron-parser';
 
 function isCronValid(v: string) {
   return isValidCron(v, { allowBlankDay: true, alias: true, seconds: true });
@@ -16,6 +17,9 @@ const enableLogging = ref(true);
 const logPath = ref('/var/log/myjob');
 const rotateDaily = ref(true);
 const redirectStderr = ref(true);
+const tz = ref(Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC');
+const previewCount = ref(5);
+const previews = ref<string[]>([]);
 const cronstrueConfig = reactive({
   verbose: true,
   dayOfWeekStartIndexZero: true,
@@ -112,6 +116,19 @@ const crontabLine = computed(() => {
   return `${cron.value} ${withLog}`;
 });
 
+watch([cron, tz, previewCount], () => {
+  try {
+    const options: any = { tz: tz.value };
+    const interval = parser.parseExpression(cron.value, options);
+    const list: string[] = [];
+    for (let i = 0; i < Math.max(0, Math.min(previewCount.value, 20)); i++) list.push(interval.next().toString());
+    previews.value = list;
+  }
+  catch {
+    previews.value = [];
+  }
+});
+
 const cronValidationRules = [
   {
     validator: (value: string) => isCronValid(value),
@@ -158,6 +175,18 @@ const cronValidationRules = [
         <n-form-item label="Crontab line" style="width: 100%">
           <TextareaCopyable :value="crontabLine" language="bash" class="w-full" />
         </n-form-item>
+        <n-form-item label="Timezone">
+          <c-input-text v-model:value="tz" placeholder="e.g. Asia/Ho_Chi_Minh" class="w-full" />
+        </n-form-item>
+        <n-form-item label="Preview next runs">
+          <n-input-number v-model:value="previewCount" :min="0" :max="20" />
+        </n-form-item>
+        <div v-if="previews.length">
+          <div class="mb-1 opacity-80">Next runs ({{ tz }}):</div>
+          <ul class="list-disc pl-4">
+            <li v-for="p in previews" :key="p">{{ p }}</li>
+          </ul>
+        </div>
       </n-form>
     </div>
 

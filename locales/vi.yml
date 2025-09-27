@@ -100,6 +100,9 @@ tools:
   rich-text-to-markdown:
     title: Rich Text → Markdown
     description: Dán nội dung giàu định dạng (HTML/RTF) từ clipboard và chuyển sang Markdown (GFM) bằng to-markdown/Turndown.
+  ec-ed25519-keygen:
+    title: Tạo cặp khóa EC/Ed25519
+    description: Tạo cặp khóa Ed25519 hoặc ECDSA (ES256/384/512). Xuất JWK và PEM (SPKI/PKCS#8).
   json-query-explorer:
     title: Trình truy vấn JSON
     description: Truy vấn/lọc JSON bằng JSONPath hoặc JMESPath với kết quả tức thì.
@@ -308,6 +311,10 @@ tools:
   qrcode-generator:
     title: Tạo mã QR
     description: Tạo và tải xuống mã QR cho một URL hoặc chỉ một đoạn văn bản và tùy chỉnh màu nền và màu chữ.
+
+  qr-reader:
+    title: Đọc mã QR
+    description: Quét mã QR từ camera hoặc hình ảnh, giải mã tức thì.
 
   wifi-qrcode-generator:
     title: Tạo mã QR WiFi

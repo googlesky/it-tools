@@ -100,6 +100,9 @@ tools:
   rich-text-to-markdown:
     title: Rich Text → Markdown
     description: Paste clipboard rich text (HTML/RTF) and convert to Markdown (GFM) using to-markdown/Turndown.
+  ec-ed25519-keygen:
+    title: EC/Ed25519 keypair generator
+    description: Generate Ed25519 or ECDSA (ES256/384/512) keypairs. Export JWK and PEM (SPKI/PKCS#8).
   json-query-explorer:
     title: JSON Query Explorer
     description: Query/filter JSON using JSONPath or JMESPath with instant results.
@@ -315,6 +318,10 @@ tools:
   qrcode-generator:
     title: QR Code generator
     description: Generate and download a QR code for a URL (or just plain text), and customize the background and foreground colors.
+
+  qr-reader:
+    title: QR Code reader
+    description: Read QR codes from camera or images, with instant decode.
 
   wifi-qrcode-generator:
     title: WiFi QR Code generator

@@ -73,6 +73,7 @@ import { tool as metaTagGenerator } from './meta-tag-generator';
 import { tool as mimeTypes } from './mime-types';
 import { tool as otpCodeGeneratorAndValidator } from './otp-code-generator-and-validator';
 import { tool as qrCodeGenerator } from './qr-code-generator';
+import { tool as qrReader } from './qr-reader';
 import { tool as wifiQrCodeGenerator } from './wifi-qr-code-generator';
 import { tool as randomPortGenerator } from './random-port-generator';
 import { tool as romanNumeralConverter } from './roman-numeral-converter';
@@ -95,6 +96,7 @@ import { tool as curlToCode } from './curl-to-code';
 import { tool as csvSuite } from './csv-suite';
 import { tool as jwtBuilder } from './jwt-builder';
 import { tool as richTextToMarkdown } from './rich-text-to-markdown';
+import { tool as ecEd25519Keygen } from './ec-ed25519-keypair-generator';
 
 export const toolsByCategory: ToolCategory[] = [
   {
@@ -150,7 +152,7 @@ export const toolsByCategory: ToolCategory[] = [
   },
   {
     name: 'Images and videos',
-    components: [qrCodeGenerator, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder],
+    components: [qrCodeGenerator, qrReader, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder],
   },
   {
     name: 'Development',
@@ -164,6 +166,7 @@ export const toolsByCategory: ToolCategory[] = [
       curlToCode,
       csvSuite,
       jwtBuilder,
+      ecEd25519Keygen,
       jsonMinify,
       jsonToCsv,
       sqlPrettify,

@@ -7,6 +7,11 @@ export interface HttpRequestIR {
   body?: string
 }
 
+export interface PostmanCollection {
+  info: { name: string; schema: string }
+  item: Array<{ name: string; request: any }>
+}
+
 function base64Encode(text: string): string {
   try {
     // Browser
@@ -235,6 +240,52 @@ function formatBodyValue(ir: HttpRequestIR): string {
     }
   }
   return `'${String(ir.body).replace(/'/g, "\\'")}'`;
+}
+
+export function generatePostmanCollection(ir: HttpRequestIR): string {
+  const coll: PostmanCollection = {
+    info: { name: 'Converted from curl', schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json' },
+    item: [
+      {
+        name: `${ir.method.toUpperCase()} ${ir.url}`,
+        request: {
+          method: ir.method.toUpperCase(),
+          header: Object.entries(ir.headers || {}).map(([key, value]) => ({ key, value })),
+          url: ir.url,
+          ...(ir.body !== undefined
+            ? {
+                body: isJsonContent(ir)
+                  ? { mode: 'raw', raw: tryFormatJson(ir.body), options: { raw: { language: 'json' } } }
+                  : { mode: 'raw', raw: String(ir.body) },
+              }
+            : {}),
+        },
+      },
+    ],
+  };
+  return JSON.stringify(coll, null, 2);
+}
+
+export function generateInsomniaRequest(ir: HttpRequestIR): string {
+  // Minimal Insomnia request export (v4 export schema simplified)
+  const req = {
+    _type: 'request',
+    _id: 'req_curl_to_insomnia',
+    name: `${ir.method.toUpperCase()} ${ir.url}`,
+    method: ir.method.toUpperCase(),
+    url: ir.url,
+    headers: Object.entries(ir.headers || {}).map(([name, value]) => ({ name, value })),
+    body: ir.body !== undefined
+      ? (isJsonContent(ir)
+          ? { mimeType: 'application/json', text: tryFormatJson(ir.body) }
+          : { mimeType: 'application/x-www-form-urlencoded', text: String(ir.body) })
+      : undefined,
+  };
+  return JSON.stringify(req, null, 2);
+}
+
+function tryFormatJson(text: string): string {
+  try { return JSON.stringify(JSON.parse(text), null, 2); } catch { return text; }
 }
 
 

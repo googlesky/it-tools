@@ -27,6 +27,37 @@ export const useCommandPaletteStore = defineStore('command-palette', () => {
   const searchOptions: PaletteOption[] = [
     ...toolsOptions,
     {
+      name: 'Convert clipboard: HTML → Markdown',
+      description: 'Read HTML from clipboard and open Rich Text → Markdown tool.',
+      action: async () => {
+        try {
+          const clip = await navigator.clipboard.readText();
+          const router = useRouter();
+          await router.push('/rich-text-to-markdown');
+          // Store into localStorage for the tool to pick up
+          localStorage.setItem('rtmd:clipboard', clip);
+        } catch {}
+      },
+      category: 'Actions',
+      keywords: ['clipboard', 'html', 'markdown', 'paste', 'convert'],
+      closeOnSelect: true,
+    },
+    {
+      name: 'Convert clipboard: curl → code',
+      description: 'Read curl from clipboard and open Curl to code tool.',
+      action: async () => {
+        try {
+          const clip = await navigator.clipboard.readText();
+          const router = useRouter();
+          await router.push('/curl-to-code');
+          localStorage.setItem('curl:clipboard', clip);
+        } catch {}
+      },
+      category: 'Actions',
+      keywords: ['clipboard', 'curl', 'convert', 'code'],
+      closeOnSelect: true,
+    },
+    {
       name: 'Random tool',
       description: 'Get a random tool from the list.',
       action: () => {

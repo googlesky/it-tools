@@ -103,6 +103,9 @@ tools:
   ec-ed25519-keygen:
     title: EC/Ed25519 keypair generator
     description: Generate Ed25519 or ECDSA (ES256/384/512) keypairs. Export JWK and PEM (SPKI/PKCS#8).
+  openapi-viewer:
+    title: OpenAPI Viewer
+    description: Load YAML/JSON OpenAPI spec, browse endpoints, and view sample requests.
   json-query-explorer:
     title: JSON Query Explorer
     description: Query/filter JSON using JSONPath or JMESPath with instant results.

@@ -103,6 +103,9 @@ tools:
   ec-ed25519-keygen:
     title: Tạo cặp khóa EC/Ed25519
     description: Tạo cặp khóa Ed25519 hoặc ECDSA (ES256/384/512). Xuất JWK và PEM (SPKI/PKCS#8).
+  openapi-viewer:
+    title: Trình xem OpenAPI
+    description: Tải spec OpenAPI YAML/JSON, duyệt endpoint và xem mẫu request.
   json-query-explorer:
     title: Trình truy vấn JSON
     description: Truy vấn/lọc JSON bằng JSONPath hoặc JMESPath với kết quả tức thì.

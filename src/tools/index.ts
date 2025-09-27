@@ -97,6 +97,7 @@ import { tool as csvSuite } from './csv-suite';
 import { tool as jwtBuilder } from './jwt-builder';
 import { tool as richTextToMarkdown } from './rich-text-to-markdown';
 import { tool as ecEd25519Keygen } from './ec-ed25519-keypair-generator';
+import { tool as openapiViewer } from './openapi-viewer';
 
 export const toolsByCategory: ToolCategory[] = [
   {
@@ -167,6 +168,7 @@ export const toolsByCategory: ToolCategory[] = [
       csvSuite,
       jwtBuilder,
       ecEd25519Keygen,
+      openapiViewer,
       jsonMinify,
       jsonToCsv,
       sqlPrettify,

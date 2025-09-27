@@ -11,7 +11,9 @@ const processing = ref(false);
 
 // Load fonts locally via dynamic imports to avoid any CORS/external CDN issues
 // Vite will code-split these and load on demand
+// Lazily register only when selected; cache module promises to avoid refetch
 const fontModules = import.meta.glob('/node_modules/figlet/importable-fonts/*.js');
+const fontModuleCache: Record<string, Promise<any>> = {};
 const loadedFonts = new Set<string>();
 
 function normalizeName(value: string): string {
@@ -34,7 +36,8 @@ async function ensureFontLoaded(fontName: string) {
   }
 
   const loader = matched[1] as () => Promise<{ default: string }>;
-  const mod = await loader();
+  if (!fontModuleCache[fontName]) fontModuleCache[fontName] = loader();
+  const mod = await fontModuleCache[fontName];
   figlet.parseFont(fontName as any, mod.default);
   loadedFonts.add(fontName);
 }

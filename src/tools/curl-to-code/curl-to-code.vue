@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { parseCurlCommand, generateAxios, generateFetch, generateHttpie, generateSqlmap } from './curl-to-code.service';
+import { parseCurlCommand, generateAxios, generateFetch, generateHttpie, generateSqlmap, generatePostmanCollection, generateInsomniaRequest } from './curl-to-code.service';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
 
 const curl = ref("curl -X POST 'https://api.example.com/users?active=true' \\\n+  -H 'Authorization: Bearer <token>' \\\n+  -H 'Content-Type: application/json' \\\n+  --data '{\"name\":\"Alice\",\"age\":30}'");
 
-const target = ref<'fetch' | 'axios' | 'httpie' | 'sqlmap'>('fetch');
+const target = ref<'fetch' | 'axios' | 'httpie' | 'sqlmap' | 'postman' | 'insomnia'>('fetch');
 
 const output = computed(() => {
   const ir = parseCurlCommand(curl.value || '');
@@ -12,6 +12,8 @@ const output = computed(() => {
   if (target.value === 'axios') return generateAxios(ir);
   if (target.value === 'httpie') return generateHttpie(ir);
   if (target.value === 'sqlmap') return generateSqlmap(ir);
+  if (target.value === 'postman') return generatePostmanCollection(ir);
+  if (target.value === 'insomnia') return generateInsomniaRequest(ir);
   return generateFetch(ir);
 });
 </script>
@@ -33,6 +35,8 @@ const output = computed(() => {
             { label: 'axios', value: 'axios' },
             { label: 'httpie', value: 'httpie' },
             { label: 'sqlmap', value: 'sqlmap' },
+            { label: 'Postman (collection JSON)', value: 'postman' },
+            { label: 'Insomnia (request JSON)', value: 'insomnia' },
           ]"
         />
       </n-form-item>

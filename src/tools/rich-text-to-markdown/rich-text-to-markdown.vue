@@ -44,6 +44,18 @@ function convertNow() {
   markdown.value = service.turndown(html.value);
 }
 
+onMounted(() => {
+  try {
+    const stored = localStorage.getItem('rtmd:clipboard');
+    if (stored) {
+      html.value = stored;
+      localStorage.removeItem('rtmd:clipboard');
+      convertNow();
+    }
+  }
+  catch {}
+});
+
 async function onPaste(e: ClipboardEvent) {
   const dt = e.clipboardData;
   if (!dt) return;

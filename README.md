@@ -34,6 +34,28 @@ docker run -d --name it-tools --restart unless-stopped -p 8080:80 ghcr.io/google
 - [Tipi](https://www.runtipi.io/docs/apps-available)
 - [Unraid](https://unraid.net/community/apps?q=it-tools)
 
+### Security Headers
+
+The default Docker image includes security headers configured in nginx for enhanced protection:
+
+- **Content-Security-Policy**: Restricts resource loading to prevent XSS attacks
+- **Referrer-Policy**: Controls referrer information sent with requests
+- **Permissions-Policy**: Disables sensitive features like camera, microphone, and geolocation
+- **X-Content-Type-Options**: Prevents MIME-type sniffing attacks
+- **X-Frame-Options**: Protects against clickjacking attacks
+- **HSTS**: Commented by default, enable when using HTTPS/TLS
+
+**Customizing CSP**: If you need to modify the Content-Security-Policy (e.g., to allow additional external resources), you can:
+
+1. Create a custom nginx.conf based on the default configuration
+2. Mount it as a volume: `-v /path/to/custom/nginx.conf:/etc/nginx/conf.d/default.conf`
+3. Adjust the CSP policy as needed for your environment
+
+Example for custom CSP with additional trusted domains:
+```nginx
+add_header Content-Security-Policy "default-src 'self'; img-src 'self' data: blob: https://trusted-cdn.com; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://*.plausible.io https://api.trusted-service.com; font-src 'self' data:; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self'" always;
+```
+
 ## Contribute
 
 ### Recommended IDE Setup

@@ -9,13 +9,42 @@ const output = ref('');
 const errored = ref(false);
 const processing = ref(false);
 
-figlet.defaults({ fontPath: '//unpkg.com/figlet@1.6.0/fonts/' });
+// Load fonts locally via dynamic imports to avoid any CORS/external CDN issues
+// Vite will code-split these and load on demand
+const fontModules = import.meta.glob('/node_modules/figlet/importable-fonts/*.js');
+const loadedFonts = new Set<string>();
+
+function normalizeName(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+async function ensureFontLoaded(fontName: string) {
+  if (loadedFonts.has(fontName)) return;
+
+  const normalizedTarget = normalizeName(fontName);
+  const entries = Object.entries(fontModules);
+
+  const matched = entries.find(([path]) => {
+    const base = path.substring(path.lastIndexOf('/') + 1, path.length - 3); // remove .js
+    return normalizeName(base.replace(/_/g, ' ')) === normalizedTarget;
+  });
+
+  if (!matched) {
+    throw new Error(`Font module not found for ${fontName}`);
+  }
+
+  const loader = matched[1] as () => Promise<{ default: string }>;
+  const mod = await loader();
+  figlet.parseFont(fontName as any, mod.default);
+  loadedFonts.add(fontName);
+}
 
 watchEffect(async () => {
   processing.value = true;
   try {
+    await ensureFontLoaded(font.value);
     const options: figlet.Options = {
-      font: font.value as figlet.Fonts,
+      font: font.value as any,
       width: width.value,
       whitespaceBreak: true,
     };
@@ -37,11 +66,12 @@ watchEffect(async () => {
   processing.value = false;
 });
 
-const fonts = ['1Row', '3-D', '3D Diagonal', '3D-ASCII', '3x5', '4Max', '5 Line Oblique', 'AMC 3 Line', 'AMC 3 Liv1', 'AMC AAA01', 'AMC Neko', 'AMC Razor', 'AMC Razor2', 'AMC Slash', 'AMC Slider', 'AMC Thin', 'AMC Tubes', 'AMC Untitled', 'ANSI Shadow', 'ASCII New Roman', 'Acrobatic', 'Alligator', 'Alligator2', 'Alpha', 'Alphabet', 'Arrows', 'Avatar', 'B1FF', 'B1FF', 'Banner', 'Banner3-D', 'Banner3', 'Banner4', 'Barbwire', 'Basic', 'Bear', 'Bell', 'Benjamin', 'Big Chief', 'Big Money-ne', 'Big Money-nw', 'Big Money-se', 'Big Money-sw', 'Big', 'Bigfig', 'Binary', 'Block', 'Blocks', 'Bloody', 'Bolger', 'Braced', 'Bright', 'Broadway KB', 'Broadway', 'Bubble', 'Bulbhead', 'Caligraphy', 'Caligraphy2', 'Calvin S', 'Cards', 'Catwalk', 'Chiseled', 'Chunky', 'Coinstak', 'Cola', 'Colossal', 'Computer', 'Contessa', 'Contrast', 'Cosmike', 'Crawford', 'Crawford2', 'Crazy', 'Cricket', 'Cursive', 'Cyberlarge', 'Cybermedium', 'Cybersmall', 'Cygnet', 'DANC4', 'DOS Rebel', 'DWhistled', 'Dancing Font', 'Decimal', 'Def Leppard', 'Delta Corps Priest 1', 'Diamond', 'Diet Cola', 'Digital', 'Doh', 'Doom', 'Dot Matrix', 'Double Shorts', 'Double', 'Dr Pepper', 'Efti Chess', 'Efti Font', 'Efti Italic', 'Efti Piti', 'Efti Robot', 'Efti Wall', 'Efti Water', 'Electronic', 'Elite', 'Epic', 'Fender', 'Filter', 'Fire Font-k', 'Fire Font-s', 'Flipped', 'Flower Power', 'Four Tops', 'Fraktur', 'Fun Face', 'Fun Faces', 'Fuzzy', 'Georgi16', 'Georgia11', 'Ghost', 'Ghoulish', 'Glenyn', 'Goofy', 'Gothic', 'Graceful', 'Gradient', 'Graffiti', 'Greek', 'Heart Left', 'Heart Right', 'Henry 3D', 'Hex', 'Hieroglyphs', 'Hollywood', 'Horizontal Left', 'Horizontal Right', 'ICL-1900', 'Impossible', 'Invita', 'Isometric1', 'Isometric2', 'Isometric3', 'Isometric4', 'Italic', 'Ivrit', 'JS Block Letters', 'JS Bracket Letters', 'JS Capital Curves', 'JS Cursive', 'JS Stick Letters', 'Jacky', 'Jazmine', 'Jerusalem', 'Katakana', 'Kban', 'Keyboard', 'Knob', 'Konto Slant', 'Konto', 'LCD', 'Larry 3D 2', 'Larry 3D', 'Lean', 'Letters', 'Lil Devil', 'Line Blocks', 'Linux', 'Lockergnome', 'Madrid', 'Marquee', 'Maxfour', 'Merlin1', 'Merlin2', 'Mike', 'Mini', 'Mirror', 'Mnemonic', 'Modular', 'Morse', 'Morse2', 'Moscow', 'Mshebrew210', 'Muzzle', 'NScript', 'NT Greek', 'NV Script', 'Nancyj-Fancy', 'Nancyj-Improved', 'Nancyj-Underlined', 'Nancyj', 'Nipples', 'O8', 'OS2', 'Octal', 'Ogre', 'Old Banner', 'Patorjk\'s Cheese', 'Patorjk-HeX', 'Pawp', 'Peaks Slant', 'Peaks', 'Pebbles', 'Pepper', 'Poison', 'Puffy', 'Puzzle', 'Pyramid', 'Rammstein', 'Rectangles', 'Red Phoenix', 'Relief', 'Relief2', 'Reverse', 'Roman', 'Rot13', 'Rot13', 'Rotated', 'Rounded', 'Rowan Cap', 'Rozzo', 'Runic', 'Runyc', 'S Blood', 'SL Script', 'Santa Clara', 'Script', 'Serifcap', 'Shadow', 'Shimrod', 'Short', 'Slant Relief', 'Slant', 'Slide', 'Small Caps', 'Small Isometric1', 'Small Keyboard', 'Small Poison', 'Small Script', 'Small Shadow', 'Small Slant', 'Small Tengwar', 'Small', 'Soft', 'Speed', 'Spliff', 'Stacey', 'Stampate', 'Stampatello', 'Standard', 'Star Strips', 'Star Wars', 'Stellar', 'Stforek', 'Stick Letters', 'Stop', 'Straight', 'Stronger Than All', 'Sub-Zero', 'Swamp Land', 'Swan', 'Sweet', 'THIS', 'Tanja', 'Tengwar', 'Term', 'Test1', 'The Edge', 'Thick', 'Thin', 'Thorned', 'Three Point', 'Ticks Slant', 'Ticks', 'Tiles', 'Tinker-Toy', 'Tombstone', 'Train', 'Trek', 'Tsalagi', 'Tubular', 'Twisted', 'Two Point', 'USA Flag', 'Univers', 'Varsity', 'Wavy', 'Weird', 'Wet Letter', 'Whimsy', 'Wow'];
+// Keep a reasonable curated list (all fonts exist in figlet/importable-fonts)
+const fonts = ['Standard', '3-D', '3D Diagonal', '3D-ASCII', '3x5', '4Max', '5 Line Oblique', 'Banner', 'Banner3-D', 'Banner3', 'Banner4', 'Basic', 'Big', 'Bigfig', 'Block', 'Bloody', 'Bubble', 'Calvin S', 'Cola', 'Colossal', 'Computer', 'Contessa', 'Cosmike', 'Cyberlarge', 'Cybermedium', 'Cybersmall', 'Doh', 'Doom', 'Dot Matrix', 'Electronic', 'Elite', 'Fire Font-s', 'Flipped', 'Flower Power', 'Fraktur', 'Ghost', 'Ghoulish', 'Gothic', 'Graffiti', 'Greek', 'Hex', 'Hollywood', 'Isometric1', 'Isometric2', 'Isometric3', 'Isometric4', 'Italic', 'Ivrit', 'Jerusalem', 'Larry 3D', 'Lean', 'Letters', 'Linux', 'Marquee', 'Mini', 'Mirror', 'Nancyj', 'Ogre', 'Pawp', 'Puffy', 'Rectangles', 'Relief', 'Relief2', 'Reverse', 'Roman', 'Rounded', 'Runic', 'Runyc', 'Serifcap', 'Shadow', 'Slant', 'Small', 'Small Slant', 'Speed', 'Star Wars', 'Straight', 'Swamp Land', 'Swan', 'Sweet', 'Term', 'Thick', 'Thin', 'Three Point', 'Tinker-Toy', 'Tombstone', 'Train', 'Trek', 'Tubular', 'USA Flag', 'Univers', 'Varsity', 'Weird', 'Whimsy'];
 </script>
 
 <template>
-  <c-card style="max-width: 600px;">
+<c-card style="max-width: 900px;">
     <c-input-text
       v-model:value="input"
       label="Your text:"
@@ -87,6 +117,7 @@ const fonts = ['1Row', '3-D', '3D Diagonal', '3D-ASCII', '3x5', '4Max', '5 Line 
         :value="output"
         mb-1 mt-1
         copy-placement="outside"
+        class="w-full"
       />
     </n-form-item>
   </c-card>

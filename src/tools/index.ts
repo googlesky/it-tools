@@ -41,6 +41,7 @@ import { tool as benchmarkBuilder } from './benchmark-builder';
 import { tool as userAgentParser } from './user-agent-parser';
 import { tool as ipv4SubnetCalculator } from './ipv4-subnet-calculator';
 import { tool as dockerRunToDockerComposeConverter } from './docker-run-to-docker-compose-converter';
+import { tool as dockerComposeToDockerRun } from './docker-compose-to-docker-run';
 import { tool as htmlWysiwygEditor } from './html-wysiwyg-editor';
 import { tool as rsaKeyPairGenerator } from './rsa-key-pair-generator';
 import { tool as textToNatoAlphabet } from './text-to-nato-alphabet';
@@ -88,6 +89,12 @@ import { tool as macAddressLookup } from './mac-address-lookup';
 import { tool as xmlFormatter } from './xml-formatter';
 import { tool as yamlViewer } from './yaml-viewer';
 import { tool as passwordGenerator } from './password-generator';
+import { tool as jsonSchemaValidator } from './json-schema-validator';
+import { tool as jsonQueryExplorer } from './json-query-explorer';
+import { tool as curlToCode } from './curl-to-code';
+import { tool as csvSuite } from './csv-suite';
+import { tool as jwtBuilder } from './jwt-builder';
+import { tool as richTextToMarkdown } from './rich-text-to-markdown';
 
 export const toolsByCategory: ToolCategory[] = [
   {
@@ -117,6 +124,7 @@ export const toolsByCategory: ToolCategory[] = [
       xmlToJson,
       jsonToXml,
       markdownToHtml,
+      richTextToMarkdown,
     ],
   },
   {
@@ -151,11 +159,17 @@ export const toolsByCategory: ToolCategory[] = [
       randomPortGenerator,
       crontabGenerator,
       jsonViewer,
+      jsonQueryExplorer,
+      jsonSchemaValidator,
+      curlToCode,
+      csvSuite,
+      jwtBuilder,
       jsonMinify,
       jsonToCsv,
       sqlPrettify,
       chmodCalculator,
       dockerRunToDockerComposeConverter,
+      dockerComposeToDockerRun,
       xmlFormatter,
       yamlViewer,
       emailNormalizer,

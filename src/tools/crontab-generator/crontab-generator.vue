@@ -2,6 +2,7 @@
 import cronstrue from 'cronstrue';
 import { isValidCron } from 'cron-validator';
 import { useStyleStore } from '@/stores/style.store';
+import TextareaCopyable from '@/components/TextareaCopyable.vue';
 
 function isCronValid(v: string) {
   return isValidCron(v, { allowBlankDay: true, alias: true, seconds: true });
@@ -10,6 +11,11 @@ function isCronValid(v: string) {
 const styleStore = useStyleStore();
 
 const cron = ref('40 * * * *');
+const command = ref('echo "hello"');
+const enableLogging = ref(true);
+const logPath = ref('/var/log/myjob');
+const rotateDaily = ref(true);
+const redirectStderr = ref(true);
 const cronstrueConfig = reactive({
   verbose: true,
   dayOfWeekStartIndexZero: true,
@@ -99,6 +105,13 @@ const cronString = computed(() => {
   return ' ';
 });
 
+const logFile = computed(() => `${logPath.value}${rotateDaily.value ? '_$(date +\\%F)' : ''}.log`);
+const crontabLine = computed(() => {
+  const baseCmd = (command.value || '').trim() || 'echo';
+  const withLog = enableLogging.value ? `${baseCmd} >> ${logFile.value}${redirectStderr.value ? ' 2>&1' : ''}` : baseCmd;
+  return `${cron.value} ${withLog}`;
+});
+
 const cronValidationRules = [
   {
     validator: (value: string) => isCronValid(value),
@@ -121,6 +134,31 @@ const cronValidationRules = [
 
     <div class="cron-string">
       {{ cronString }}
+    </div>
+
+    <div>
+      <n-form :show-feedback="false" label-width="170" label-placement="left">
+        <n-form-item label="Command" style="width: 100%">
+          <c-input-text v-model:value="command" placeholder='your command, e.g. /usr/bin/backup' raw-text monospace class="w-full" />
+        </n-form-item>
+        <n-form-item label="Log to file">
+          <n-switch v-model:value="enableLogging" />
+        </n-form-item>
+        <div v-if="enableLogging">
+          <n-form-item label="Log base path" style="width: 100%">
+            <c-input-text v-model:value="logPath" placeholder="/var/log/myjob" raw-text monospace class="w-full" />
+          </n-form-item>
+          <n-form-item label="Rotate daily (suffix by date)">
+            <n-switch v-model:value="rotateDaily" />
+          </n-form-item>
+          <n-form-item label="Redirect stderr to same file">
+            <n-switch v-model:value="redirectStderr" />
+          </n-form-item>
+        </div>
+        <n-form-item label="Crontab line" style="width: 100%">
+          <TextareaCopyable :value="crontabLine" language="bash" class="w-full" />
+        </n-form-item>
+      </n-form>
     </div>
 
     <n-divider />

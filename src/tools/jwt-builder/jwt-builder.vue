@@ -82,7 +82,7 @@ async function doVerify() {
           { label: 'EdDSA', value: 'EdDSA' },
         ]" style="min-width: 160px" />
       </n-form-item>
-      <n-form-item v-if="alg==='HS256'" :label="$t('tools.jwt-builder.secret')"><c-input-text v-model:value="secret" password /></n-form-item>
+      <n-form-item v-if="alg==='HS256'" :label="$t('tools.jwt-builder.secret')"><c-input-text v-model:value="secret" type="password" /></n-form-item>
     </div>
 
     <div v-if="alg!=='HS256'" grid grid-cols-1 md:grid-cols-2 gap-3>

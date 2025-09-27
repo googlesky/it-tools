@@ -8,6 +8,13 @@ const alg = ref<Alg>('Ed25519');
 const kid = ref('');
 const extractable = ref(true);
 
+const algOptions = [
+  { label: 'Ed25519', value: 'Ed25519' },
+  { label: 'ES256', value: 'ES256' },
+  { label: 'ES384', value: 'ES384' },
+  { label: 'ES512', value: 'ES512' },
+] as const;
+
 const publicJwk = ref('');
 const privateJwk = ref('');
 const publicPem = ref('');
@@ -20,12 +27,14 @@ async function runGenerate() {
   generating.value = true;
   errorMsg.value = '';
   try {
-    const algo = alg.value === 'Ed25519' ? 'Ed25519' : alg.value;
-    const namedCurve = alg.value === 'Ed25519' ? 'Ed25519' : (
-      alg.value === 'ES256' ? 'P-256' : alg.value === 'ES384' ? 'P-384' : 'P-521'
-    );
-
-    const { publicKey, privateKey } = await generateKeyPair(algo as any, { extractable: extractable.value, crv: namedCurve as any });
+    let publicKey: CryptoKey;
+    let privateKey: CryptoKey;
+    if (alg.value === 'Ed25519') {
+      ({ publicKey, privateKey } = await generateKeyPair('EdDSA', { extractable: extractable.value, crv: 'Ed25519' as any }));
+    }
+    else {
+      ({ publicKey, privateKey } = await generateKeyPair(alg.value, { extractable: extractable.value } as any));
+    }
 
     const pubJwk = await exportJWK(publicKey);
     const prvJwk = await exportJWK(privateKey);
@@ -33,8 +42,8 @@ async function runGenerate() {
       (pubJwk as any).kid = kid.value;
       (prvJwk as any).kid = kid.value;
     }
-    (pubJwk as any).alg = alg.value;
-    (prvJwk as any).alg = alg.value;
+    (pubJwk as any).alg = alg.value === 'Ed25519' ? 'EdDSA' : alg.value;
+    (prvJwk as any).alg = alg.value === 'Ed25519' ? 'EdDSA' : alg.value;
     publicJwk.value = JSON.stringify(pubJwk, null, 2);
     privateJwk.value = JSON.stringify(prvJwk, null, 2);
 
@@ -52,7 +61,7 @@ async function runGenerate() {
   <c-card>
     <n-form label-width="140" label-placement="left">
       <n-form-item label="Algorithm">
-        <n-select v-model:value="alg" :options="['Ed25519', 'ES256', 'ES384', 'ES512']" />
+        <n-select v-model:value="alg" :options="algOptions as any" />
       </n-form-item>
       <n-form-item label="KID (optional)">
         <c-input-text v-model:value="kid" placeholder="kid" class="w-full" />

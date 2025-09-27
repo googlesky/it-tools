@@ -350,6 +350,10 @@ tools:
     title: HTML WYSIWYG editor
     description: Online, feature-rich WYSIWYG HTML editor which generates the source code of the content immediately.
 
+  markdown-wysiwyg:
+    title: Markdown WYSIWYG editor
+    description: Rich Markdown editor with live preview using md-editor-v3.
+
   yaml-to-toml:
     title: YAML to TOML
     description: Parse and convert YAML to TOML.

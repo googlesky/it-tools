@@ -342,6 +342,10 @@ tools:
     title: Trình soạn thảo HTML WYSIWYG
     description: Trình soạn thảo HTML trực tuyến với trình soạn thảo WYSIWYG đa chức năng, lấy mã nguồn của nội dung ngay lập tức.
 
+  markdown-wysiwyg:
+    title: Trình soạn thảo Markdown WYSIWYG
+    description: Trình soạn thảo Markdown phong phú với xem trước trực tiếp (md-editor-v3).
+
   yaml-to-toml:
     title: YAML sang TOML
     description: Phân tích và chuyển đổi YAML sang TOML.

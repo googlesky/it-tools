@@ -114,7 +114,11 @@
     "turndown-plugin-gfm": "^1.0.2",
     "jsqr": "^1.4.0",
     "cron-parser": "^4.9.0",
-    "md-editor-v3": "^4.13.0"
+    "md-editor-v3": "^4.13.0",
+    "xlsx": "^0.18.5",
+    "terser": "^5.22.0",
+    "csso": "^5.0.5",
+    "jsbarcode": "^3.11.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.41.0",

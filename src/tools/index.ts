@@ -99,11 +99,23 @@ import { tool as jwtBuilder } from './jwt-builder';
 import { tool as richTextToMarkdown } from './rich-text-to-markdown';
 import { tool as ecEd25519Keygen } from './ec-ed25519-keypair-generator';
 import { tool as openapiViewer } from './openapi-viewer';
+import { tool as x509Csr } from './x509-csr';
+import { tool as joseJwk } from './jose-jwk';
+import { tool as ipv6SubnetCalculator } from './ipv6-subnet-calculator';
+import { tool as colorContrastChecker } from './color-contrast-checker';
+import { tool as vcardQrGenerator } from './vcard-qr-generator';
+import { tool as textCompress } from './text-compress';
+import { tool as unitConverters } from './unit-converters';
+import { tool as xlsxViewer } from './xlsx-viewer';
+import { tool as prettifyMinify } from './prettify-minify';
+import { tool as dnsRecordBuilders } from './dns-record-builders';
+import { tool as barcodeGenerator } from './barcode-generator';
+import { tool as jwtVerify } from './jwt-verify';
 
 export const toolsByCategory: ToolCategory[] = [
   {
     name: 'Crypto',
-    components: [tokenGenerator, passwordGenerator, hashText, bcrypt, uuidGenerator, ulidGenerator, cypher, bip39, hmacGenerator, rsaKeyPairGenerator, passwordStrengthAnalyser, pdfSignatureChecker],
+    components: [tokenGenerator, passwordGenerator, hashText, bcrypt, uuidGenerator, ulidGenerator, cypher, bip39, hmacGenerator, rsaKeyPairGenerator, x509Csr, joseJwk, passwordStrengthAnalyser, pdfSignatureChecker],
   },
   {
     name: 'Converter',
@@ -151,11 +163,12 @@ export const toolsByCategory: ToolCategory[] = [
       httpStatusCodes,
       jsonDiff,
       safelinkDecoder,
+      colorContrastChecker,
     ],
   },
   {
     name: 'Images and videos',
-    components: [qrCodeGenerator, qrReader, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder],
+    components: [qrCodeGenerator, qrReader, wifiQrCodeGenerator, svgPlaceholderGenerator, cameraRecorder, vcardQrGenerator, barcodeGenerator],
   },
   {
     name: 'Development',
@@ -169,6 +182,7 @@ export const toolsByCategory: ToolCategory[] = [
       curlToCode,
       csvSuite,
       jwtBuilder,
+      jwtVerify,
       ecEd25519Keygen,
       openapiViewer,
       jsonMinify,
@@ -182,11 +196,15 @@ export const toolsByCategory: ToolCategory[] = [
       emailNormalizer,
       regexTester,
       regexMemo,
+      textCompress,
+      prettifyMinify,
+      xlsxViewer,
+      dnsRecordBuilders,
     ],
   },
   {
     name: 'Network',
-    components: [ipv4SubnetCalculator, ipv4AddressConverter, ipv4RangeExpander, macAddressLookup, macAddressGenerator, ipv6UlaGenerator],
+    components: [ipv4SubnetCalculator, ipv4AddressConverter, ipv4RangeExpander, macAddressLookup, macAddressGenerator, ipv6UlaGenerator, ipv6SubnetCalculator],
   },
   {
     name: 'Math',
@@ -194,7 +212,7 @@ export const toolsByCategory: ToolCategory[] = [
   },
   {
     name: 'Measurement',
-    components: [chronometer, temperatureConverter, benchmarkBuilder],
+    components: [chronometer, temperatureConverter, benchmarkBuilder, unitConverters],
   },
   {
     name: 'Text',

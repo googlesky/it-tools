@@ -60,6 +60,47 @@ toolCard:
 search:
   label: Search
 tools:
+  jwt-verify:
+    title: JWT Verify
+    description: Verify JWT signatures with a provided JWK or SPKI public key.
+  x509-csr:
+    title: X.509 & CSR toolkit
+    description: Decode X.509 certificates/CSRs and generate new PKCS#10 CSRs with SAN.
+    decodeCert: Decode certificate (PEM/DER)
+    decodeCsr: Decode CSR (PEM)
+    generateCsr: Generate CSR
+  jose-jwk:
+    title: JOSE/JWK toolkit
+    description: Convert PEM↔JWK, build JWKS, and JWE encrypt/decrypt.
+    convert: Convert keys
+    jwe: JWE encrypt/decrypt
+  ipv6-subnet-calculator:
+    title: IPv6 subnet calculator
+    description: Parse IPv6 prefixes, compute network range, and PTR reverse zone.
+  color-contrast-checker:
+    title: Color contrast checker (WCAG)
+    description: Evaluate contrast ratio and AA/AAA compliance for foreground/background colors.
+  vcard-qr-generator:
+    title: vCard/MeCard QR generator
+    description: Generate a QR code for contact cards (vCard 3.0, MeCard).
+  text-compress:
+    title: Gzip/Deflate/Brotli (text)
+    description: Compress and decompress text using Web Compression Streams.
+  unit-converters:
+    title: Unit converters (bytes, data rate, duration)
+    description: Convert bytes, bandwidth, and time across common units.
+  xlsx-viewer:
+    title: XLSX Viewer/Converter
+    description: Preview Excel sheets and convert to CSV/JSON.
+  prettify-minify:
+    title: Prettify/Minify (HTML/CSS/JS)
+    description: Format source code with Prettier or minify with Terser/CSSO.
+  dns-record-builders:
+    title: DNS builders (SPF/DKIM/DMARC)
+    description: Build email DNS records with helpful defaults.
+  barcode-generator:
+    title: Barcode generator
+    description: Generate barcodes (Code128, EAN-13/8, UPC) with live preview.
   docker-compose-to-docker-run:
     title: Docker Compose → Docker run
     description: Convert a docker-compose.yml service into an equivalent docker run command.
@@ -67,6 +108,43 @@ tools:
     result: docker run
   jwt-builder:
     title: JWT Builder/Verifier
+    jose-jwk:
+      title: JOSE/JWK toolkit
+      description: Convert PEM↔JWK, build JWKS, and JWE encrypt/decrypt.
+      convert: Convert keys
+      jwe: JWE encrypt/decrypt
+
+    ipv6-subnet-calculator:
+      title: IPv6 subnet calculator
+      description: Parse IPv6 prefixes, compute network range, and PTR reverse zone.
+
+    color-contrast-checker:
+      title: Color contrast checker (WCAG)
+      description: Evaluate contrast ratio and AA/AAA compliance for foreground/background colors.
+
+    vcard-qr-generator:
+      title: vCard/MeCard QR generator
+      description: Generate a QR code for contact cards (vCard 3.0, MeCard).
+
+    text-compress:
+      title: Gzip/Deflate/Brotli (text)
+      description: Compress and decompress text using Web Compression Streams.
+
+    unit-converters:
+      title: Unit converters (bytes, data rate, duration)
+      description: Convert bytes, bandwidth, and time across common units.
+    xlsx-viewer:
+      title: XLSX Viewer/Converter
+      description: Preview Excel sheets and convert to CSV/JSON.
+    prettify-minify:
+      title: Prettify/Minify (HTML/CSS/JS)
+      description: Format source code with Prettier or minify with Terser/CSSO.
+    dns-record-builders:
+      title: DNS builders (SPF/DKIM/DMARC)
+      description: Build email DNS records with helpful defaults.
+    barcode-generator:
+      title: Barcode generator
+      description: Generate barcodes (Code128, EAN-13/8, UPC) with live preview.
     description: Build and verify JWTs (HS256, RS256, ES256, EdDSA). Import PEM/JWK.
     alg: Algorithm
     secret: Secret

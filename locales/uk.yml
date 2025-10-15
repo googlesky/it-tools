@@ -70,3 +70,6 @@ tools:
     measurement: Вимірювання
     text: Текст
     data: Дані
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Створюйте команди docker run та файли docker-compose.yml з виводу docker inspect.

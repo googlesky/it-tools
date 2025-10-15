@@ -42,6 +42,7 @@ import { tool as userAgentParser } from './user-agent-parser';
 import { tool as ipv4SubnetCalculator } from './ipv4-subnet-calculator';
 import { tool as dockerRunToDockerComposeConverter } from './docker-run-to-docker-compose-converter';
 import { tool as dockerComposeToDockerRun } from './docker-compose-to-docker-run';
+import { tool as dockerInspectToDeployment } from './docker-inspect-to-deployment';
 import { tool as htmlWysiwygEditor } from './html-wysiwyg-editor';
 import { tool as markdownWysiwyg } from './markdown-wysiwyg';
 import { tool as rsaKeyPairGenerator } from './rsa-key-pair-generator';
@@ -191,6 +192,7 @@ export const toolsByCategory: ToolCategory[] = [
       chmodCalculator,
       dockerRunToDockerComposeConverter,
       dockerComposeToDockerRun,
+      dockerInspectToDeployment,
       xmlFormatter,
       yamlViewer,
       emailNormalizer,

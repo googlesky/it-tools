@@ -80,3 +80,6 @@ tools:
     copied: Le token a été copié
     length: Longueur
     tokenPlaceholder: Le token...
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Génère des commandes docker run et des fichiers docker-compose.yml à partir de la sortie de docker inspect.

@@ -65,6 +65,9 @@ tools:
     description: Chuyển một service trong docker-compose.yml thành lệnh docker run tương đương.
     input: docker-compose.yml
     result: docker run
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Tạo lệnh docker run và tệp docker-compose.yml từ đầu ra của docker inspect.
   jwt-builder:
     title: Trình tạo/xác minh JWT
     description: Tạo và xác minh JWT (HS256, RS256, ES256, EdDSA). Nhập PEM/JWK.

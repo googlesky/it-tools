@@ -70,3 +70,6 @@ tools:
     measurement: 'Medidas'
     text: 'Texto'
     data: 'Dados'
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Gere comandos docker run e arquivos docker-compose.yml a partir da saída do docker inspect.

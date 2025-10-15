@@ -93,6 +93,9 @@ tools:
     button:
       copy: Kopier
       refresh: Oppfrisk
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Generer docker run-kommandoer og docker-compose.yml-filer fra utdataene til docker inspect.
   percentage-calculator:
     title: Prosent kalkulator
     description: Beregn enkelt prosenter fra en verdi til en annen, eller fra en prosent til en verdi.

@@ -106,6 +106,9 @@ tools:
     description: Convert a docker-compose.yml service into an equivalent docker run command.
     input: docker-compose.yml
     result: docker run
+  docker-inspect-to-deployment:
+    title: Docker inspect → Docker run / compose
+    description: Build docker run commands and docker-compose.yml files from docker inspect JSON output.
   jwt-builder:
     title: JWT Builder/Verifier
     jose-jwk:

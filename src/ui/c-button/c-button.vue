@@ -77,7 +77,7 @@ const size = computed(() => theme.value.size[sizeName.value]);
   font-weight: 400;
   color: v-bind('variantTheme.textColor');
   padding: 0 14px;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: background-color cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
 
   background-color: v-bind('variantTheme.backgroundColor');
@@ -115,6 +115,11 @@ const size = computed(() => theme.value.size[sizeName.value]);
   &.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (max-width: 700px) {
+    min-height: 36px;
+    min-width: 36px;
   }
 }
 </style>

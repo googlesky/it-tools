@@ -3,13 +3,14 @@ import JSON5 from 'json5';
 import { useStorage } from '@vueuse/core';
 import { formatJson } from './json.models';
 import { withDefaultOnError } from '@/utils/defaults';
+import { useQueryParam } from '@/composable/queryParams';
 import { useValidation } from '@/composable/validation';
 import TextareaCopyable from '@/components/TextareaCopyable.vue';
 import { getJsonParseLocation } from '@/utils/jsonErrorLocation';
 
 const inputElement = ref<HTMLElement>();
 
-const rawJson = useStorage('json-prettify:raw-json', '{"hello": "world", "foo": "bar"}');
+const rawJson = useQueryParam({ name: 'json', defaultValue: '{"hello": "world", "foo": "bar"}' });
 const indentSize = useStorage('json-prettify:indent-size', 3);
 const sortKeys = useStorage('json-prettify:sort-keys', true);
 const cleanJson = computed(() => withDefaultOnError(() => formatJson({ rawJson, indentSize, sortKeys }), ''));

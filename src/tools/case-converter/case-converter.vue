@@ -13,12 +13,13 @@ import {
   snakeCase,
 } from 'change-case';
 import InputCopyable from '../../components/InputCopyable.vue';
+import { useQueryParam } from '@/composable/queryParams';
 
 const baseConfig = {
   stripRegexp: /[^A-Za-zÀ-ÖØ-öø-ÿ]+/gi,
 };
 
-const input = ref('lorem ipsum dolor sit amet');
+const input = useQueryParam({ name: 'text', defaultValue: 'lorem ipsum dolor sit amet' });
 
 const formats = computed(() => [
   {

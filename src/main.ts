@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { createHead } from '@vueuse/head';
+import { createHead } from '@unhead/vue/client';
 
 import { registerSW } from 'virtual:pwa-register';
 import shadow from 'vue-shadow-dom';
@@ -19,7 +19,8 @@ registerSW();
 const app = createApp(App);
 
 app.use(createPinia());
-app.use(createHead());
+const head = createHead();
+app.use(head);
 app.use(i18nPlugin);
 app.use(router);
 app.use(naive);

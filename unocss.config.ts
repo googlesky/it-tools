@@ -23,5 +23,9 @@ export default defineConfig({
     'divider': 'h-1px bg-current op-10',
     'bg-surface': 'bg-#ffffff dark:bg-#232323',
     'bg-background': 'bg-#f1f5f9 dark:bg-#1c1c1c',
+    'card-shadow': 'shadow-sm shadow-gray-200/50 dark:shadow-black/20',
+    'card-shadow-hover': 'shadow-md shadow-gray-300/50 dark:shadow-black/30',
+    'focus-ring': 'outline-2 outline-solid outline-#1ea54c outline-offset-2',
+    'transition-base': 'transition-all duration-200 ease-in-out',
   },
 });

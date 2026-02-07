@@ -49,4 +49,16 @@ html {
 * {
   box-sizing: border-box;
 }
+
+*:focus-visible {
+  outline: 2px solid #1ea54c;
+  outline-offset: 2px;
+}
+
+body,
+.n-layout,
+.n-layout-sider,
+.c-card {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
 </style>

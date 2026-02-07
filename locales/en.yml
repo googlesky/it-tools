@@ -4,6 +4,7 @@ home:
     favoriteTools: 'Your favorite tools'
     allTools: 'All the tools'
     favoritesDndToolTip: 'Drag and drop to reorder favorites'
+    noFavorites: 'Click the heart icon on any tool to add it to your favorites'
   subtitle: 'Handy tools for developers'
   toggleMenu: 'Toggle menu'
   home: Home
@@ -27,6 +28,10 @@ home:
     darkMode: 'Dark mode'
     lightMode: 'Light mode'
     mode: 'Toggle dark/light mode'
+share:
+  tooltip: 'Share this tool'
+  copied: 'URL copied to clipboard'
+  failed: 'Failed to copy URL'
 about:
   content: >
     # About IT-Tools

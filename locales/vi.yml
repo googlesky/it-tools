@@ -4,6 +4,7 @@ home:
     favoriteTools: 'Công cụ yêu thích của bạn'
     allTools: 'Tất cả công cụ'
     favoritesDndToolTip: 'Kéo thả để sắp xếp lại yêu thích'
+    noFavorites: 'Nhấn vào biểu tượng trái tim trên bất kỳ công cụ nào để thêm vào yêu thích'
   subtitle: 'Công cụ cho nhà phát triển.'
   toggleMenu: 'Chuyển đổi menu'
   home: Trang chủ
@@ -27,6 +28,10 @@ home:
     darkMode: 'Chế độ tối'
     lightMode: 'Chế độ sáng'
     mode: 'Chuyển đổi chế độ tối/sáng'
+share:
+  tooltip: 'Chia sẻ công cụ này'
+  copied: 'Đã sao chép URL vào clipboard'
+  failed: 'Không thể sao chép URL'
 about:
   content: >
     # Về IT-Tools

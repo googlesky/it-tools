@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { useCopy } from '@/composable/copy';
+import { useQueryParam } from '@/composable/queryParams';
 import { base64ToText, isValidBase64, textToBase64 } from '@/utils/base64';
 import { withDefaultOnError } from '@/utils/defaults';
 
 const encodeUrlSafe = useStorage('base64-string-converter--encode-url-safe', false);
 const decodeUrlSafe = useStorage('base64-string-converter--decode-url-safe', false);
 
-const textInput = ref('');
+const textInput = useQueryParam({ name: 'text', defaultValue: '' });
 const base64Output = computed(() => textToBase64(textInput.value, { makeUrlSafe: encodeUrlSafe.value }));
 const { copy: copyTextBase64 } = useCopy({ source: base64Output, text: 'Base64 string copied to the clipboard' });
 
-const base64Input = ref('');
+const base64Input = useQueryParam({ name: 'b64', defaultValue: '' });
 const textOutput = computed(() =>
   withDefaultOnError(() => base64ToText(base64Input.value.trim(), { makeUrlSafe: decodeUrlSafe.value }), ''),
 );

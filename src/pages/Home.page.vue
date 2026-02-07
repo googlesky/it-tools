@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IconDragDrop, IconHeart } from '@tabler/icons-vue';
-import { useHead } from '@vueuse/head';
+import { useHead } from '@unhead/vue';
 import { computed } from 'vue';
 import Draggable from 'vuedraggable';
 import ColoredCard from '../components/ColoredCard.vue';
@@ -15,16 +15,15 @@ const { t } = useI18n();
 
 const favoriteTools = computed(() => toolStore.favoriteTools);
 
-// Update favorite tools order when drag is finished
 function onUpdateFavoriteTools() {
-  toolStore.updateFavoriteTools(favoriteTools.value); // Update the store with the new order
+  toolStore.updateFavoriteTools(favoriteTools.value);
 }
 </script>
 
 <template>
   <div class="pt-50px">
     <div class="grid-wrapper">
-      <div class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="grid grid-cols-1 gap-16px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
         <ColoredCard v-if="config.showBanner" :title="$t('home.follow.title')" :icon="IconHeart">
           {{ $t('home.follow.p1') }}
           <a
@@ -47,7 +46,7 @@ function onUpdateFavoriteTools() {
 
       <transition name="height">
         <div v-if="toolStore.favoriteTools.length > 0">
-          <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+          <h3 class="category-header">
             {{ $t('home.categories.favoriteTools') }}
             <c-tooltip :tooltip="$t('home.categories.favoritesDndToolTip')">
               <n-icon :component="IconDragDrop" size="18" />
@@ -55,7 +54,7 @@ function onUpdateFavoriteTools() {
           </h3>
           <Draggable
             :list="favoriteTools"
-            class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4"
+            class="grid grid-cols-1 gap-16px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4"
             ghost-class="ghost-favorites-draggable"
             item-key="name"
             @end="onUpdateFavoriteTools"
@@ -67,19 +66,24 @@ function onUpdateFavoriteTools() {
         </div>
       </transition>
 
+      <div v-if="toolStore.favoriteTools.length === 0" class="empty-favorites">
+        <n-icon :component="IconHeart" size="24" class="op-30" />
+        <span>{{ $t('home.categories.noFavorites', 'Click the heart icon on any tool to add it to your favorites') }}</span>
+      </div>
+
       <div v-if="toolStore.newTools.length > 0">
-        <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+        <h3 class="category-header">
           {{ t('home.categories.newestTools') }}
         </h3>
-        <div class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
+        <div class="grid grid-cols-1 gap-16px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
           <ToolCard v-for="tool in toolStore.newTools" :key="tool.name" :tool="tool" />
         </div>
       </div>
 
-      <h3 class="mb-5px mt-25px text-neutral-400 font-500">
+      <h3 class="category-header">
         {{ $t('home.categories.allTools') }}
       </h3>
-      <div class="grid grid-cols-1 gap-12px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="grid grid-cols-1 gap-16px lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-4">
         <ToolCard v-for="tool in toolStore.tools" :key="tool.name" :tool="tool" />
       </div>
     </div>
@@ -87,6 +91,27 @@ function onUpdateFavoriteTools() {
 </template>
 
 <style scoped lang="less">
+.category-header {
+  margin-top: 32px;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 13px;
+  font-weight: 600;
+  color: #999;
+}
+
+.empty-favorites {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0.5;
+}
+
 .height-enter-active,
 .height-leave-active {
   transition: all 0.5s ease-in-out;

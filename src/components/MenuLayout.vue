@@ -4,6 +4,7 @@ import { useStyleStore } from '@/stores/style.store';
 const styleStore = useStyleStore();
 const { isMenuCollapsed, isSmallScreen } = toRefs(styleStore);
 const siderPosition = computed(() => (isSmallScreen.value ? 'absolute' : 'static'));
+const showOverlay = computed(() => isSmallScreen.value && !isMenuCollapsed.value);
 </script>
 
 <template>
@@ -22,7 +23,9 @@ const siderPosition = computed(() => (isSmallScreen.value ? 'absolute' : 'static
     </n-layout-sider>
     <n-layout class="content">
       <slot name="content" />
-      <div v-show="isSmallScreen && !isMenuCollapsed" class="overlay" @click="isMenuCollapsed = true" />
+      <transition name="overlay-fade">
+        <div v-if="showOverlay" class="overlay" @click="isMenuCollapsed = true" />
+      </transition>
     </n-layout>
   </n-layout>
 </template>
@@ -38,10 +41,27 @@ const siderPosition = computed(() => (isSmallScreen.value ? 'absolute' : 'static
   cursor: pointer;
 }
 
+.overlay-fade-enter-active,
+.overlay-fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.overlay-fade-enter-from,
+.overlay-fade-leave-to {
+  opacity: 0;
+}
+
 .content {
-  // background-color: #f1f5f9;
   ::v-deep(.n-layout-scroll-container) {
     padding: 26px;
+  }
+}
+
+@media (max-width: 700px) {
+  .content {
+    ::v-deep(.n-layout-scroll-container) {
+      padding: 16px;
+    }
   }
 }
 

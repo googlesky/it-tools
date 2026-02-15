@@ -47,6 +47,6 @@ const theme = useThemeVars();
 
 .tool-card-link:hover .tool-card {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(30, 165, 76, 0.1), 0 2px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15), 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 </style>

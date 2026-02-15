@@ -150,7 +150,7 @@ const toolDescription = computed<string>(() => t(`tools.${i18nKey.value}.descrip
     .separator {
       width: 60px;
       height: 3px;
-      background: #1ea54c;
+      background: #6366f1;
       border-radius: 2px;
       margin: 12px 0;
     }

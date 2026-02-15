@@ -51,7 +51,7 @@ html {
 }
 
 *:focus-visible {
-  outline: 2px solid #1ea54c;
+  outline: 2px solid #6366f1;
   outline-offset: 2px;
 }
 
